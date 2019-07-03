@@ -1,17 +1,16 @@
 <template>
-    <div class="category">
-        <h1>{{id?'编辑':'新建'}}物品</h1>
+    <div class="hero">
+        <h1>{{id?'编辑':'新建'}}英雄</h1>
         <el-form @submit.native.prevent="save" label-width="120px">
-            <el-form-item label="类型">
-                <el-select v-model="model.parent">
-                    <el-option v-for="item in parents" :key="item._id" :label="item.name" :value="item._id"></el-option>
+            <el-form-item label="分类">
+                <el-select v-model="model.category">
+                    <el-option v-for="item in categories" :key="item._id" :label="item.name" :value="item._id"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="名称">
                 <el-input v-model="model.name"></el-input>
             </el-form-item>
-            <el-form-item label="图标">
-                <!-- <el-input v-model="model.icon"></el-input> -->
+            <el-form-item label="头像">
                 <el-upload
                     class="avatar-uploader"
                     :action="$http.defaults.baseURL+'/upload'"
@@ -19,7 +18,7 @@
                     :on-success="afterUpload"
                     :before-upload="beforeUpload"
                 >
-                    <img v-if="model.icon" :src="model.icon" class="avatar" />
+                    <img v-if="model.avatar" :src="model.avatar" class="avatar" />
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
             </el-form-item>
@@ -39,21 +38,21 @@ export default {
     data() {
         return {
             model: {},
-            
+            categories: []
         };
     },
     methods: {
         async save() {
             if (this.id) {
-                await this.$http.put(`rest/item/${this.id}`, this.model);
-                this.$router.push("/item/list");
+                await this.$http.put(`rest/hero/${this.id}`, this.model);
+                this.$router.push("/hero/list");
                 this.$message({
                     type: "success",
                     message: "修改成功"
                 });
             } else {
-                await this.$http.post("/rest/item", this.model);
-                this.$router.push("/item/list");
+                await this.$http.post("/rest/hero", this.model);
+                this.$router.push("/hero/list");
                 this.$message({
                     type: "success",
                     message: "保存成功"
@@ -61,13 +60,16 @@ export default {
             }
         },
         async fetch() {
-            const res = await this.$http.get(`rest/item/${this.id}`);
+            const res = await this.$http.get(`rest/hero/${this.id}`);
             this.model = res.data;
         },
-
+async fetchCategories() {
+            const res = await this.$http.get(`rest/categories`);
+            this.categories = res.data;
+        },
         afterUpload(res) {
             console.log(res)
-            this.$set(this.model, 'icon', res.url) 
+            this.$set(this.model, 'avatar', res.url) 
         },
 
         beforeUpload(){
@@ -77,6 +79,7 @@ export default {
     },
     created() {
         this.id && this.fetch();
+        this.fetchCategories()
     }
 };
 </script>

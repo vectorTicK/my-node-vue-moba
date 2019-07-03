@@ -9,13 +9,16 @@ module.exports = app => {
         res.send(model)
     })
     router.get('/', async (req, res) => {
-
         const queryOption = {}
-        if(req.Model.modelName === 'Category'){
+        if (req.Model.modelName === 'Category') {
             queryOption.populate = 'parent'
+        }
+        if(req.Model.modelName === 'Hero') {
+            queryOption.populate = 'category'
         }
         const items = await req.Model.find().setOptions(queryOption).limit(10)
         res.send(items)
+
     })
     router.put('/:id', async (req, res) => {
         const model = await req.Model.findByIdAndUpdate(req.params.id, req.body)
@@ -33,9 +36,20 @@ module.exports = app => {
         console.log(model)
     })
 
-    app.use('/admin/api/rest/:resource', async (req, res, next)=> {
-const modelName = require('inflection').classify(req.params.resource)
-req.Model = require(`../../models/${modelName}`)
-next()
+    app.use('/admin/api/rest/:resource', async (req, res, next) => {
+        const modelName = require('inflection').classify(req.params.resource)
+        req.Model = require(`../../models/${modelName}`)
+        next()
     }, router)
+
+
+    const multer = require('multer')
+    const upload = multer({
+        dest: __dirname + '/../../uploads'
+    })
+    app.post('/admin/api/upload',upload.single('file'), async (req, res) => {
+        const file = req.file
+        file.url = `http://localhost:3000/uploads/${file.filename}`
+        res.send(file)  
+    })
 }
