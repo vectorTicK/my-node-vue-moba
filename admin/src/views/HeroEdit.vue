@@ -2,18 +2,27 @@
     <div class="hero">
         <h1>{{id?'编辑':'新建'}}英雄</h1>
         <el-form @submit.native.prevent="save" label-width="120px">
-            <el-form-item label="分类">
-                <el-select v-model="model.category">
-                    <el-option v-for="item in categories" :key="item._id" :label="item.name" :value="item._id"></el-option>
-                </el-select>
-            </el-form-item>
             <el-form-item label="名称">
                 <el-input v-model="model.name"></el-input>
+            </el-form-item>
+            <el-form-item label="称号">
+                <el-input v-model="model.title"></el-input>
+            </el-form-item>
+            <el-form-item label="分类">
+                <el-select v-model="model.categories" multiple>
+                    <el-option
+                        v-for="item in categories"
+                        :key="item._id"
+                        :label="item.name"
+                        :value="item._id"
+                    ></el-option>
+                </el-select>
             </el-form-item>
             <el-form-item label="头像">
                 <el-upload
                     class="avatar-uploader"
-                    :action="$http.defaults.baseURL+'/upload'"
+                    :action="uploadUrl"
+                    :headers = "getAuthHeaders()"
                     :show-file-list="false"
                     :on-success="afterUpload"
                     :before-upload="beforeUpload"
@@ -23,6 +32,9 @@
                 </el-upload>
             </el-form-item>
 
+            <el-form-item label="难度">
+                <el-rate v-model="model.scores.difficult"></el-rate>
+            </el-form-item>
             <el-form-item>
                 <el-button type="primary" native-type="submit">保存</el-button>
             </el-form-item>
@@ -37,7 +49,9 @@ export default {
     },
     data() {
         return {
-            model: {},
+            model: {
+                scores: {difficult:1}
+            },
             categories: []
         };
     },
@@ -61,25 +75,21 @@ export default {
         },
         async fetch() {
             const res = await this.$http.get(`rest/hero/${this.id}`);
-            this.model = res.data;
+            this.model = Object.assign({}, this.model,res.data);
         },
-async fetchCategories() {
-            const res = await this.$http.get(`rest/categories`);
+        async fetchCategories() {
+            const res = await this.$http.get(`rest/categories/hero_categories`);
             this.categories = res.data;
         },
         afterUpload(res) {
-            console.log(res)
-            this.$set(this.model, 'avatar', res.url) 
+            this.$set(this.model, "avatar", res.url);
         },
 
-        beforeUpload(){
-
-        }
-
+        beforeUpload() {}
     },
     created() {
         this.id && this.fetch();
-        this.fetchCategories()
+        this.fetchCategories();
     }
 };
 </script>

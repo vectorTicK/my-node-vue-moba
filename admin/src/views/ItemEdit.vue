@@ -3,18 +3,23 @@
         <h1>{{id?'编辑':'新建'}}物品</h1>
         <el-form @submit.native.prevent="save" label-width="120px">
             <el-form-item label="类型">
-                <el-select v-model="model.parent">
-                    <el-option v-for="item in parents" :key="item._id" :label="item.name" :value="item._id"></el-option>
+                <el-select v-model="model.categories">
+                    <el-option
+                        v-for="item in categories"
+                        :key="item._id"
+                        :label="item.name"
+                        :value="item._id"
+                    ></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="名称">
                 <el-input v-model="model.name"></el-input>
             </el-form-item>
             <el-form-item label="图标">
-                <!-- <el-input v-model="model.icon"></el-input> -->
                 <el-upload
                     class="avatar-uploader"
-                    :action="$http.defaults.baseURL+'/upload'"
+                    :action="uploadUrl"
+                    :headers = "getAuthHeaders()"
                     :show-file-list="false"
                     :on-success="afterUpload"
                     :before-upload="beforeUpload"
@@ -39,7 +44,7 @@ export default {
     data() {
         return {
             model: {},
-            
+            categories: []
         };
     },
     methods: {
@@ -64,19 +69,19 @@ export default {
             const res = await this.$http.get(`rest/item/${this.id}`);
             this.model = res.data;
         },
-
+        async fetchCategories() {
+            const res = await this.$http.get(`rest/categories/hero_categories`);
+            this.categories = res.data;
+        },
         afterUpload(res) {
-            console.log(res)
-            this.$set(this.model, 'icon', res.url) 
+            this.$set(this.model, "icon", res.url);
         },
 
-        beforeUpload(){
-
-        }
-
+        beforeUpload() {}
     },
     created() {
         this.id && this.fetch();
+        this.fetchCategories();
     }
 };
 </script>
