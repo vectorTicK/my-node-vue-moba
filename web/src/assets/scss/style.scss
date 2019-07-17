@@ -42,7 +42,7 @@ $color in $colors {
 @each $key,
 $size in $font-sizes {
     .fs-#{$key} {
-        font-size: $size * $base-font-size;
+        font-size: $size * $base-font-size !important;
     }
 }
 
@@ -115,12 +115,27 @@ $type-value in $spacing-types {
 }
 
 .nav {
+    display: flex;
     .nav-item {
         border-bottom: 3px solid transparent;
         padding-bottom: 0.1rem;
     }
     .active {
-        border-bottom: 3px solid white;
+        color: map-get($map: $colors, $key: 'primary');
+        border-bottom: 3px solid map-get($map: $colors, $key: 'primary');
+    }
+}
+.nav-inverse {
+    display: flex;
+    .nav-item {
+        color: white;
+        border-bottom: 3px solid transparent;
+        padding-bottom: 0.1rem;
+    }
+
+    .active {
+        color: map-get($map: $colors, $key: 'white');
+        border-bottom: 3px solid map-get($map: $colors, $key: 'white');
     }
 }
 
