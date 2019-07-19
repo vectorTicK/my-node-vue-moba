@@ -33,6 +33,13 @@
               <el-menu-item index="/hero/create">新建英雄</el-menu-item>
               <el-menu-item index="/hero/list">英雄列表</el-menu-item>
             </el-menu-item-group>
+
+<el-menu-item-group>
+              <template slot="title">文章</template>
+              <el-menu-item index="/article/create">新建文章</el-menu-item>
+              <el-menu-item index="/article/list">文章列表</el-menu-item>
+            </el-menu-item-group>
+
             <el-menu-item-group>
               <template slot="title">用户管理</template>
               <el-menu-item index="/admin_user/create">新建用户</el-menu-item>
@@ -43,7 +50,7 @@
       </el-aside>
 
       <el-main>
-        <router-view></router-view>
+        <router-view :key="$route.path"></router-view>
       </el-main>
     </el-container>
   </el-container>

@@ -13,8 +13,10 @@ import './assets/iconfont/iconfont.css'
 Vue.use(VueAwesomeSwiper, /* { default global options } */ )
 
 import Card from './components/Card'
+import ListCard from './components/ListCard'
 
 Vue.component('m-card', Card)
+Vue.component('m-list-card', ListCard)
 
 new Vue({
   router,

@@ -29,31 +29,20 @@
             </div>
         </div>
         <!-- end of nav-icons-->
-        <m-card icon="menu" title="新闻资讯">
-            <div class="nav jc-between">
-                <div class="nav-item active">
-                    <div class="nav-link">热门</div>
+        <m-list-card icon="menu" title="新闻资讯" :categories="newsCats">
+            <template #items="{cate}">
+                <div class="d-flex py-2" v-for="(news,index) in cate.newsList" :key="index">
+                    <span>[{{news.categoryName}}]</span>
+                    <span>|</span>
+                    <span class="title flex-1">{{news.title}}</span>
+                    <span class="date">{{news.date}}</span>
                 </div>
-                <div class="nav-item">
-                    <div class="nav-link">新闻</div>
-                </div>
-                <div class="nav-item">
-                    <div class="nav-link">赛事</div>
-                </div>
-            </div>
-            <div class="mt-3">
-                <swiper>
-                    <swiper-slide>
-                        <div class="d-flex py-2" v-for="n in 5" :key="n">
-                            <span>[新闻]</span>
-                            <span>|</span>
-                            <span class="title flex-1">7月17日全服不停机更新公告</span>
-                            <span class="date">07/16</span>
-                        </div>
-                    </swiper-slide>
-                </swiper>
-            </div>
-        </m-card>
+            </template>
+        </m-list-card>
+
+        <m-card icon="menu" title="英雄列表"></m-card>
+        <m-card icon="menu" title="英雄列表"></m-card>
+        <m-card icon="menu" title="英雄列表"></m-card>
         <m-card icon="menu" title="英雄列表"></m-card>
     </div>
 </template>
@@ -66,7 +55,39 @@ export default {
                 pagination: {
                     el: ".pagination-home"
                 }
-            }
+            },
+            newsCats: [
+                {
+                    name: "热门",
+                    newsList: [
+                        {
+                            categoryName: "公告",
+                            title: "7月17日全服不停机更新公告",
+                            date: "7月17日"
+                        },
+                        {
+                            categoryName: "公告",
+                            title: "7月17日全服不停机更新公告",
+                            date: "7月17日"
+                        }
+                    ]
+                },
+                {
+                    name: "新闻",
+                    newsList: [
+                        {
+                            categoryName: "xiwen",
+                            title: "7月17日全服不停机更新公告",
+                            date: "7月17日"
+                        },
+                        {
+                            categoryName: "xinwen",
+                            title: "7月17日全服不停机更新公告",
+                            date: "7月17日"
+                        }
+                    ]
+                }
+            ]
         };
     }
 };

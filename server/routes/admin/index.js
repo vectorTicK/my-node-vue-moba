@@ -22,6 +22,16 @@ module.exports = app => {
         res.send(items)
     })
 
+    router.get('/article_categories', async (req, res) => {
+        const parentId = await req.Model.find({
+            name: '新闻分类'
+        })
+        const items = await req.Model.find({
+            parent: parentId
+        })
+        res.send(items)
+    })
+
     router.get('/', async (req, res) => {
         const queryOption = {}
         if (req.Model.modelName === 'Category') {
@@ -30,7 +40,7 @@ module.exports = app => {
         if (req.Model.modelName === 'Hero') {
             queryOption.populate = 'categories'
         }
-        const items = await req.Model.find().setOptions(queryOption).limit(10)
+        const items = await req.Model.find().setOptions(queryOption)
 
         res.send(items)
 
