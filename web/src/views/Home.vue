@@ -31,11 +31,11 @@
         <!-- end of nav-icons-->
         <m-list-card icon="menu" title="新闻资讯" :categories="newsCats">
             <template #items="{cate}">
-                <div class="d-flex py-2" v-for="(news,index) in cate.newsList" :key="index">
-                    <span>[{{news.categoryName}}]</span>
-                    <span>|</span>
-                    <span class="title flex-1">{{news.title}}</span>
-                    <span class="date">{{news.date}}</span>
+                <div class="d-flex py-2 ai-center" v-for="(news,index) in cate.newsList" :key="index">
+                    <span class="fs-xs text-info">[{{news.categoryName}}]</span>
+                    <span class="px-1">|</span>
+                    <span class="title flex-1 text-ellipsis text-dark-1">{{news.title}}</span>
+                    <span class="date pl-3 fs-xs text-grey">{{news.createdAt | date}} </span>
                 </div>
             </template>
         </m-list-card>
@@ -48,7 +48,13 @@
 </template>
 
 <script>
+import dayjs from 'dayjs'
 export default {
+        filters: {
+        date(val) {
+            return dayjs(val).format('MM/DD')
+        }
+    },
     data() {
         return {
             swiperOption: {
@@ -57,39 +63,20 @@ export default {
                 }
             },
             newsCats: [
-                {
-                    name: "热门",
-                    newsList: [
-                        {
-                            categoryName: "公告",
-                            title: "7月17日全服不停机更新公告",
-                            date: "7月17日"
-                        },
-                        {
-                            categoryName: "公告",
-                            title: "7月17日全服不停机更新公告",
-                            date: "7月17日"
-                        }
-                    ]
-                },
-                {
-                    name: "新闻",
-                    newsList: [
-                        {
-                            categoryName: "xiwen",
-                            title: "7月17日全服不停机更新公告",
-                            date: "7月17日"
-                        },
-                        {
-                            categoryName: "xinwen",
-                            title: "7月17日全服不停机更新公告",
-                            date: "7月17日"
-                        }
-                    ]
-                }
             ]
         };
+    },
+    created() {
+        this.fetchNewsCats()
+    },
+    methods: {
+        async fetchNewsCats() {
+            const res = await this.$http.get('news/list')
+            console.log(res.data)
+            this.newsCats = res.data
+        }
     }
+    
 };
 </script>
 

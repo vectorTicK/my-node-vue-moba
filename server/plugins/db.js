@@ -6,4 +6,6 @@ module.exports = app => {
 	}).then(()=>{
 		console.log('db connected')
 	})
+
+	require('require-all')(__dirname + '/../models') // 引用所有Model
 }

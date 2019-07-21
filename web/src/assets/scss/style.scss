@@ -167,3 +167,10 @@ $type-value in $spacing-types {
         background-position: 38.577% 52.076%;
     }
 }
+
+.text-ellipsis {
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

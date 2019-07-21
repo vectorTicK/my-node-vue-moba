@@ -6,13 +6,13 @@
                 v-for="(item,index) in categories"
                 :key="index"
                 :class="{active: (index===active)}"
-                @click="active =index"
+                @click="$refs.list.swiper.slideTo(index)"
             >
                 <div class="nav-link">{{item.name}}</div>
             </div>
         </div>
         <div class="swiper mt-3">
-            <swiper>
+            <swiper ref="list" @slide-change="()=> active = $refs.list.swiper.realIndex">
                 <swiper-slide v-for="(item,index) in categories" :key="index">
                     <slot name="items" :cate="item"></slot>
                 </swiper-slide>
@@ -22,12 +22,14 @@
 </template>
 
 <script>
+
 export default {
     props: {
         icon: { type: String, required: true },
         title: { type: String, required: true },
         categories: { type: Array, required: true }
     },
+
     data() {
         return {
             active: 0

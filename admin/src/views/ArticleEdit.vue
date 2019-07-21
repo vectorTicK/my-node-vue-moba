@@ -16,7 +16,11 @@
                 <el-input v-model="model.title"></el-input>
             </el-form-item>
             <el-form-item label="正文">
-                <vue-editor v-model="model.body"></vue-editor>
+                <vue-editor
+                    v-model="model.body"
+                    useCustomImageHandler
+                    @imageAdded="handleImageAdded"
+                ></vue-editor>
             </el-form-item>
 
             <el-form-item>
@@ -29,11 +33,10 @@
 <script>
 import { VueEditor } from "vue2-editor";
 
-
 export default {
     components: {
-    VueEditor
-  },
+        VueEditor
+    },
     props: {
         id: {}
     },
@@ -67,9 +70,24 @@ export default {
         },
         // 获取新闻分类
         async fetchCategories() {
-            const res = await this.$http.get(`rest/categories/article_categories`);
+            const res = await this.$http.get(
+                `rest/categories/article_categories`
+            );
             this.categories = res.data;
         },
+
+        async handleImageAdded(file, Editor, cursorLocation, resetUploader) {
+            // An example of using FormData
+            // NOTE: Your key could be different such as:
+            // formData.append('file', file)
+
+            let formData = new FormData();
+            formData.append("file", file);
+            const res = await this.$http.post("upload", formData);
+            Editor.insertEmbed(cursorLocation, "image", res.data.url);
+            resetUploader();
+        },
+
         afterUpload(res) {
             this.$set(this.model, "icon", res.url);
         },
