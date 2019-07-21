@@ -17,7 +17,9 @@ body {
 a {
     color: #999;
 }
-
+p {
+    line-height: 1.75rem;
+}
 
 // text
 @each $var in (left, center, right) {
@@ -25,6 +27,8 @@ a {
         text-align: $var !important ; 
     }
 }
+
+
 
 @each $colorKey,
 $color in $colors {
@@ -173,4 +177,11 @@ $type-value in $spacing-types {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+// border
+@each $var in (top, right, bottom, left) {
+    .border-#{$var} {
+        border-#{$var}: 1px solid $border-color;
+    }
 }

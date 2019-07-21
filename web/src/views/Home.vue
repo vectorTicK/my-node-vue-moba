@@ -31,18 +31,15 @@
         <!-- end of nav-icons-->
         <m-list-card icon="menu" title="新闻资讯" :categories="newsCats">
             <template #items="{cate}">
-                <div class="d-flex py-2 ai-center" v-for="(news,index) in cate.newsList" :key="index">
+                <router-link tag="div" :to="`/article/${news._id}`" class="d-flex py-2 ai-center" v-for="(news,index) in cate.newsList" :key="index">
                     <span class="fs-xs text-info">[{{news.categoryName}}]</span>
                     <span class="px-1">|</span>
                     <span class="title flex-1 text-ellipsis text-dark-1">{{news.title}}</span>
                     <span class="date pl-3 fs-xs text-grey">{{news.createdAt | date}} </span>
-                </div>
+                </router-link>
             </template>
         </m-list-card>
 
-        <m-card icon="menu" title="英雄列表"></m-card>
-        <m-card icon="menu" title="英雄列表"></m-card>
-        <m-card icon="menu" title="英雄列表"></m-card>
         <m-card icon="menu" title="英雄列表"></m-card>
     </div>
 </template>
@@ -72,7 +69,6 @@ export default {
     methods: {
         async fetchNewsCats() {
             const res = await this.$http.get('news/list')
-            console.log(res.data)
             this.newsCats = res.data
         }
     }
